@@ -1,0 +1,21 @@
+{
+  "name": "memex",
+  "version": "0.0.0",
+  "description": "Personal Knownledge System",
+  "main": "webpack.config.js",
+  "scripts": {
+    "start": "webpack-dev-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Allain Lalonde <allain.lalonde@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "babel-core": "^5.6.15",
+    "babel-loader": "^5.3.1",
+    "firebase": "^2.2.7",
+    "node-libs-browser": "^0.5.2",
+    "react": "^0.13.3",
+    "react-router": "^0.13.3",
+    "webpack": "^1.10.1"
+  }
+}
