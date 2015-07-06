@@ -1,7 +1,7 @@
 {
-  "name": "memex",
+  "name": "habituate",
   "version": "0.0.0",
-  "description": "Personal Knownledge System",
+  "description": "A habit system",
   "main": "webpack.config.js",
   "scripts": {
     "start": "webpack-dev-server",
