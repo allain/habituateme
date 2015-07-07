@@ -1,4 +1,7 @@
 const React = require('react');
-const App = require('./components/App');
 
-React.render(<App />, document.getElementById('app'));
+const Actions = require('./actions');
+
+const App = require('./components/app');
+
+React.render(<App />, document.body);
