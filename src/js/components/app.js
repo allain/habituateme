@@ -5,7 +5,7 @@ const Actions = require('../actions');
 
 const userStore = require('../stores/user-store');
 
-const HabitsList = require('./habits-list');
+const HabitsList = require('./habit-list');
 const HabitAdder = require('./habit-adder');
 
 const App = React.createClass({

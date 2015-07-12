@@ -2,19 +2,20 @@ const Reflux = require('reflux');
 
 const Firebase = require('firebase');
 
-const each = require('amp-each');
-
 const firebaseRef = new Firebase('https://habituate.firebaseio.com');
 
 const Actions = Reflux.createActions({
-    "init": {},
-    "login": {children: ["completed","failed"]},
-    "logout": {children: ["completed","failed"]},
-    "changedUser": {},
-    "changedHabits": {},
-    "addHabit": {children: ["completed", "failed"]},
-    "deleteHabit": {children: ["completed", "failed"]},
-    "updateHabit": {children: ["completed", "failed"]},
+    'init': {},
+    'login': {children: ['completed','failed']},
+    'logout': {children: ['completed','failed']},
+    'changedUser': {},
+    'changedHabits': {},
+    'addHabit': {children: ['completed', 'failed']},
+    'archiveHabit': {children: ['completed', 'failed']},
+    'updateHabit': {children: ['completed', 'failed']},
+    'patchHabit': {children: ['completed', 'failed']},
+    'recordHabitSuccess': {children: ['completed', 'failed']},  
+    'recordHabitFailure': {children: ['completed', 'failed']}   
 });
 
 window.actions = Actions;

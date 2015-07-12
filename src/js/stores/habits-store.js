@@ -61,13 +61,61 @@ const HabitsStore = Reflux.createStore({
     });
   },
 
-  onDeleteHabit(habit) {
-    if (!this.habitsRef) return Actions.deleteHabit.failed(new Error('Not Logged In'));  
+  onPatchHabit(habitId, props) {  
+    if (!this.habitsRef) return Actions.patchHabit.failed(new Error('Not Logged In'));    
 
-    this.habitsRef.child(habit._id).remove((err) => {
-      if (err) return Actions.deleteHabit.failed(err);
 
-      Actions.deleteHabit.completed();
+    this.habitsRef.child(habitId).update(props, (err) => {
+      if (err) return Actions.patchHabit.failed(err);
+
+      Actions.patchHabit.completed();
+    });
+  },
+
+  onArchiveHabit(habit) {
+    if (!this.habitsRef) return Actions.archiveHabit.failed(new Error('Not Logged In'));  
+
+    this.habitsRef.child(habit._id).update({archived: Date.now()}, (err) => {
+      if (err) return Actions.archiveHabit.failed(err);
+
+      Actions.archiveHabit.completed();
+    });
+  },
+
+  onRecordHabitSuccess(habit) {
+    habit.activities = habit.activities || {};
+
+    let now = new Date();
+    let day = [now.getFullYear(),
+       ('0' + now.getMonth()).substr(0, 2),
+       ('0' + now.getDate()).substr(0,2)].join('-');
+
+
+    let count = habit.activities[day] || 0;
+    count ++;    
+
+    this.habitsRef.child(habit._id).child('activities').child(day).set(count, (err) => {      
+      if (err) return Actions.recordHabitSuccess.failed(err);
+
+      Actions.recordHabitSuccess.completed();
+    });
+  },
+
+  onRecordHabitFailure(habit) {
+    habit.activities = habit.activities || {};
+
+    let now = new Date();
+    let day = [now.getFullYear(),
+       ('0' + now.getMonth()).substr(0, 2),
+       ('0' + now.getDate()).substr(0,2)].join('-');
+
+    let count = habit.activities[day] || 0;
+    count --;    
+
+    this.habitsRef.child(habit._id).child('activities').child(day).set(count, (err) => {      
+      if (err) return Actions.recordHabitSuccess.failed(err);
+
+      Actions.recordHabitSuccess.completed();
     });
   }
 });

@@ -13,6 +13,10 @@ module.exports = {
       test: /\.js$/,
       loader: 'babel',
       exclude: [path.resolve(__dirname, 'node_modules')]
+    },
+    {
+      test: /\.scss$/,
+      loader: 'style!css!sass?sourceMap'
     }]
   },
   plugins: [

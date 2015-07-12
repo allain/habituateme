@@ -1,6 +1,6 @@
-const React = require('react');
+require('../style/style.scss');
 
-const Actions = require('./actions');
+const React = require('react');
 
 const App = require('./components/app');
 
