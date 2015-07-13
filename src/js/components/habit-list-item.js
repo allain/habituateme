@@ -5,7 +5,7 @@ import habitsStore from '../stores/habits-store';
 import {Link} from 'react-router';
 
 
-import {Paper, Toolbar, ToolbarGroup, IconButton, ListItem, Card, CardTitle, CardActions, CardText, RaisedButton} from 'material-ui';
+import {Paper, Toolbar, ToolbarGroup, IconButton, ListItem, RaisedButton} from 'material-ui';
 
 
 import map from 'amp-map';
@@ -35,16 +35,13 @@ const HabitListItem = React.createClass({
     return <Paper onTouchTap={this.edit} style={{margin: '10px'}} zDepth={2}>
       <IconButton iconClassName="material-icons" tooltipAlignment="bottom-center" tooltip="Edit" onClick={this._edit} style={{float: 'right'}}>edit</IconButton>      
       <h2 style={{padding: '10px 0 0 10px', marginBottom: 0}}>{habit.title}</h2>
-      <Toolbar>
-        <ToolbarGroup key={0} float="left">
-          <RaisedButton onClick={this._recordFailure} label="-" secondary={true} disabled={currentCount === 0} />
-        </ToolbarGroup>
-        <ToolbarGroup key={1} float="right">
-          <RaisedButton onClick={this._recordSuccess} label="+" primary={true}/>        
-        </ToolbarGroup>
-        <h3 className="day-success-tally" style={{textAlign: 'center', fontSize: '20px', padding: '10px 24px'}}>{currentCount}</h3>                    
-        
-      </Toolbar>                   
+      
+      <div style={{textAlign: 'center', padding: '20px'}}>
+        <RaisedButton onClick={this._recordFailure} label="-" secondary={true} disabled={currentCount === 0} />
+        <span className="day-success-tally" style={{textAlign: 'center', fontSize: '20px', padding: '10px 24px'}}>{currentCount}</span>                    
+        <RaisedButton onClick={this._recordSuccess} label="+" primary={true}/>        
+      </div>
+                      
       </Paper>;
   },
 

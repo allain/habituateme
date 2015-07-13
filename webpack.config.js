@@ -18,9 +18,8 @@ module.exports = {
       test: /\.scss$/,
       loader: 'style!css!sass?sourceMap'
     }]
-  }
-  /*,
+  },
   plugins: [
     new Webpack.optimize.UglifyJsPlugin({minimize: true})
-  ]*/
+  ]
 };

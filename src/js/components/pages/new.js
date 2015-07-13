@@ -5,7 +5,7 @@ import {Link} from 'react-router';
 
 import habitsStore from '../../stores/habits-store';
 
-import {TextField, SelectField, RaisedButton} from 'material-ui';
+import {Paper, TextField, SelectField, RaisedButton} from 'material-ui';
 
 let difficultyOptions = [
   {text: 'Very Easy', payload: '1'},
@@ -41,7 +41,8 @@ export default React.createClass({
   },
 
   render() {
-    return <div>      
+    return <Paper style={{margin: '20px', padding: '20px'}}>      
+      <h1 style={{marginBottom: 0}}>New Habit</h1>
       <div>        
         <TextField valueLink={this.linkState('title')} floatingLabelText="Habit Title"/>
       </div>
@@ -53,9 +54,9 @@ export default React.createClass({
       </div>
       <div>
         <RaisedButton label="Cancel" onClick={this._cancel} />
-        <RaisedButton onClick={this._add} primary={true} label="Save Changes" />
+        <RaisedButton onClick={this._add} primary={true} label="Create" style={{float: 'right'}}/>
       </div>        
-    </div>;    
+    </Paper>;    
   },
 
   contextTypes: {

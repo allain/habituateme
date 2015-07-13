@@ -5,7 +5,7 @@ import {Link} from 'react-router';
 
 import habitsStore from '../../stores/habits-store';
 
-import {TextField, SelectField, RaisedButton, FlatButton, IconButton, Dialog} from 'material-ui';
+import {Paper, TextField, SelectField, RaisedButton, FlatButton, IconButton, Dialog} from 'material-ui';
 
 let difficultyOptions = [
   {text: 'Very Easy', payload: '1'},
@@ -29,7 +29,8 @@ export default React.createClass({
     let title = this.state.newTitle || this.state.habit.title;
     let difficulty = '' + (this.state.newDifficulty || this.state.habit.difficulty);
     
-    return <div>      
+    return <Paper style={{margin: '20px', padding: '20px'}}>
+      <h1 style={{marginTop: 0}}>Update Habit</h1>  
       <div>        
         <TextField value={title} onChange={this._titleChanged} floatingLabelText="Habit Title"/>
       </div>
@@ -41,30 +42,29 @@ export default React.createClass({
         menuItems={difficultyOptions} />
       </div>
       <div>
-        <RaisedButton label="Cancel" onClick={this._cancel} />
-        <RaisedButton onClick={this._update} primary={true} label="Save Changes" />
-
+        <RaisedButton onClick={this._update} primary={true} style={{float: 'right'}} label="Update" />
+        <RaisedButton label="Cancel" onClick={this._cancel} style={{float: 'right', marginRight: '10px'}} />
+        
         <IconButton 
           iconClassName="material-icons" 
           tooltipAlignment="bottom-center" 
           tooltip="Delete" 
           touch={true} 
-          onClick={this._confirmDelete} 
-          style={{float: 'right'}}>delete</IconButton>      
+          onClick={this._confirmDelete}>delete</IconButton>      
       </div>
      
       <Dialog
         title="Delete Habit"
         actions={[
-          <FlatButton label="Cancel" onClick={this._cancelDelete} />,
-          <FlatButton label="Delete" primary={true} onClick={this._delete} ref="delete" />
+          <FlatButton label="No" onClick={this._cancelDelete} />,
+          <FlatButton label="Yes" primary={true} onClick={this._delete} ref="delete" />
         ]}
         actionFocus="delete"
         modal={true}
         ref="deleteConfirm">
         Really Delete Habit?
       </Dialog>
-    </div>;
+    </Paper>;
   },
 
   _cancel() {
