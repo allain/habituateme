@@ -1,12 +1,14 @@
-const React = require('react');
+import React from 'react';
+import Reflux from 'reflux';
+import Actions from '../actions';
+import habitsStore from '../stores/habits-store';
+import {Link} from 'react-router';
 
-const Reflux = require('reflux');
 
-const Actions = require('../actions');
+import {Paper, Toolbar, ToolbarGroup, IconButton, ListItem, Card, CardTitle, CardActions, CardText, RaisedButton} from 'material-ui';
 
-const habitsStore = require('../stores/habits-store');
 
-const map = require('amp-map');
+import map from 'amp-map';
 
 const HabitListItem = React.createClass({
   mixins: [    
@@ -19,25 +21,31 @@ const HabitListItem = React.createClass({
     };
   },
 
-  _remove() {
-      Actions.archiveHabit(this.props.habit);
-  },
+  render() {
+    let habit = this.props.habit;
+    let now = new Date();
+    let today = [now.getFullYear(),
+       ('0' + (now.getMonth() + 1)).substr(-2),
+       ('0' + now.getDate()).substr(-2)].join('-');
 
-  _titleChanged(e) {
-    this.props.habit.title = e.target.value;
-    Actions.updateHabit(this.props.habit);
-  },
+    let activities = habit.activities || {};
 
-  _difficultyChanged(e) {
-    Actions.patchHabit(this.props.habit._id, {difficulty: e.target.value});
-  },
+    let currentCount = activities[today] || 0;
 
-  _titleBlurred(e) {
-    let newTitle = e.target.value;
-    if (!newTitle) {
-      console.log(this.props.habit);
-      Actions.deleteHabit(this.props.habit);
-    }
+    return <Paper onTouchTap={this.edit} style={{margin: '10px'}} zDepth={2}>
+      <IconButton iconClassName="material-icons" tooltipAlignment="bottom-center" tooltip="Edit" onClick={this._edit} style={{float: 'right'}}>edit</IconButton>      
+      <h2 style={{padding: '10px 0 0 10px', marginBottom: 0}}>{habit.title}</h2>
+      <Toolbar>
+        <ToolbarGroup key={0} float="left">
+          <RaisedButton onClick={this._recordFailure} label="-" secondary={true} disabled={currentCount === 0} />
+        </ToolbarGroup>
+        <ToolbarGroup key={1} float="right">
+          <RaisedButton onClick={this._recordSuccess} label="+" primary={true}/>        
+        </ToolbarGroup>
+        <h3 className="day-success-tally" style={{textAlign: 'center', fontSize: '20px', padding: '10px 24px'}}>{currentCount}</h3>                    
+        
+      </Toolbar>                   
+      </Paper>;
   },
 
   _recordSuccess(e) {
@@ -48,40 +56,13 @@ const HabitListItem = React.createClass({
     Actions.recordHabitFailure(this.props.habit);
   },
 
-  render() {
-    let habit = this.props.habit;
-    let now = new Date();
-    let today = [now.getFullYear(),
-       ('0' + now.getMonth()).substr(0, 2),
-       ('0' + now.getDate()).substr(0,2)].join('-');
+  _edit() {
+    this.context.router.transitionTo('/edit/' + this.props.habit._id);
+  },
 
-    let activities = habit.activities || {};
-
-    let currentCount = activities[today] || 0;
-
-    return <div key={habit._id} className="habit-list-item">
-      <input value={habit.title} onChange={this._titleChanged} onBlur={this._titleBlurred}/>
-      <button onClick={this._remove} className="delete">x</button>
-      <div className="statuses">
-        <button onClick={this._recordSuccess}>+</button>
-        <span className="day-success-tally">{currentCount}</span>
-        <button onClick={this._recordFailure} disabled={currentCount === 0}>-</button>
-      </div>
-      <div className="difficulty">
-      <label for="difficulty">Difficulty</label>
-        <select id="difficulty" value={habit.difficulty} onChange={this._difficultyChanged}>
-          <option value="1">Easy</option>
-          <option value="3">Challenging</option>
-          <option value="5">Difficult</option>
-        </select>
-      </div>
-      <div className="activities">
-      {map(habit.activities, (count, day) => {
-        return <div className="activity" key={day}>{day} {count}</div>;
-      })}
-      </div>
-    </div>;
-  }
+  contextTypes: {
+    router: React.PropTypes.func
+  },
 });
 
 export default HabitListItem;

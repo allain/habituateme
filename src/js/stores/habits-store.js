@@ -1,19 +1,20 @@
-const each = require('amp-each');
+import each from 'amp-each';
+import Reflux from 'reflux';
+import Actions from '../actions';
 
-const Reflux = require('reflux');
-
-const Actions = require('../actions');
-
-const HabitsStore = Reflux.createStore({
+export default Reflux.createStore({
   listenables: Actions,
 
   init() {
     this.habits = JSON.parse(localStorage.getItem('habits') || '[]');
-    this.habitsRef = null;
-    Actions.changedHabits(this.habits);    
+    this.habitsRef = null;   
   },
 
-  onChangedUser(user) {    
+  getInitialState() {
+    return this.habits || [];
+  },
+
+  onChangedUser(user) {
     if (this.habitsRef) {
       this.habitsRef.off();
       this.habitsRef = null;
@@ -25,7 +26,7 @@ const HabitsStore = Reflux.createStore({
         this.habits = flatten(snapshot.val());
         localStorage.setItem('habits', JSON.stringify(this.habits));
         Actions.changedHabits(this.habits);
-      });
+      });      
     } else {
       this.habits = [];
       localStorage.setItem('habits', '[]');
@@ -33,8 +34,8 @@ const HabitsStore = Reflux.createStore({
     }    
   },
 
-  onChangedHabits(newHabits) {    
-    this.trigger(newHabits || []);            
+  onChangedHabits(newHabits) {
+    this.trigger(this.habits || []);            
   },
 
   onAddHabit(newHabit) {
@@ -86,15 +87,15 @@ const HabitsStore = Reflux.createStore({
     habit.activities = habit.activities || {};
 
     let now = new Date();
-    let day = [now.getFullYear(),
-       ('0' + now.getMonth()).substr(0, 2),
-       ('0' + now.getDate()).substr(0,2)].join('-');
+    let today = [now.getFullYear(),
+       ('0' + (now.getMonth() + 1)).substr(-2),
+       ('0' + now.getDate()).substr(-2)].join('-');
 
 
-    let count = habit.activities[day] || 0;
+    let count = habit.activities[today] || 0;
     count ++;    
 
-    this.habitsRef.child(habit._id).child('activities').child(day).set(count, (err) => {      
+    this.habitsRef.child(habit._id).child('activities').child(today).set(count, (err) => {      
       if (err) return Actions.recordHabitSuccess.failed(err);
 
       Actions.recordHabitSuccess.completed();
@@ -105,14 +106,14 @@ const HabitsStore = Reflux.createStore({
     habit.activities = habit.activities || {};
 
     let now = new Date();
-    let day = [now.getFullYear(),
-       ('0' + now.getMonth()).substr(0, 2),
-       ('0' + now.getDate()).substr(0,2)].join('-');
+    let today = [now.getFullYear(),
+       ('0' + (now.getMonth() + 1)).substr(-2),
+       ('0' + now.getDate()).substr(-2)].join('-');
 
-    let count = habit.activities[day] || 0;
+    let count = habit.activities[today] || 0;
     count --;    
 
-    this.habitsRef.child(habit._id).child('activities').child(day).set(count, (err) => {      
+    this.habitsRef.child(habit._id).child('activities').child(today).set(count, (err) => {      
       if (err) return Actions.recordHabitSuccess.failed(err);
 
       Actions.recordHabitSuccess.completed();
@@ -130,6 +131,3 @@ function flatten(obj) {
 
   return result;
 }
-
-
-export default HabitsStore;

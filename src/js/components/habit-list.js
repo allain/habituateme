@@ -1,21 +1,17 @@
-const React = require('react/addons');
-const Reflux = require('reflux');
+import React from 'react/addons';
+import Reflux from 'reflux';
 
-const habitsStore = require('../stores/habits-store');
+import habitsStore from '../stores/habits-store';
+import HabitListItem from './habit-list-item.js';
+import {List} from 'material-ui';
 
-const HabitListItem = require('./habit-list-item.js');
-
-const HabitsList = React.createClass({
+export default React.createClass({
   mixins: [
-    React.addons.LinkedStateMixin,
-    Reflux.connect(habitsStore, 'habits')
-  ],
-
-  getInitialState() {
-    return {
-      habits: []
-    };
-  },
+    React.addons.LinkedStateMixin,    
+    Reflux.connectFilter(habitsStore, "habits", function(habits) {
+      return habits.filter(habit => !habit.archived);
+    })
+  ], 
 
   render() {
     if (this.state.habits.length === 0) {
@@ -28,8 +24,6 @@ const HabitsList = React.createClass({
   },
 
   _renderHabitListItem(habit) {    
-    return <HabitListItem habit={habit}/>
+    return <HabitListItem habit={habit} key={habit._id} />
   }
 });
-
-export default HabitsList;

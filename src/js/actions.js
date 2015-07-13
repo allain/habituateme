@@ -29,7 +29,7 @@ firebaseRef.onAuth(function(newAuth) {
 });
 
 Actions.login.listen(function() {
-  firebaseRef.authWithOAuthPopup('google', (err, authData) => {
+  firebaseRef.authWithOAuthRedirect('google', (err, authData) => {
     if (err) return this.failed(err);    
 
     this.completed();
